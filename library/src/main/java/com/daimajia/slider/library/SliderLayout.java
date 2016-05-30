@@ -11,26 +11,8 @@ import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.RelativeLayout;
 
-import com.daimajia.slider.library.Animations.BaseAnimationInterface;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.Transformers.AccordionTransformer;
-import com.daimajia.slider.library.Transformers.BackgroundToForegroundTransformer;
-import com.daimajia.slider.library.Transformers.BaseTransformer;
-import com.daimajia.slider.library.Transformers.CubeInTransformer;
-import com.daimajia.slider.library.Transformers.DefaultTransformer;
-import com.daimajia.slider.library.Transformers.DepthPageTransformer;
-import com.daimajia.slider.library.Transformers.FadeTransformer;
-import com.daimajia.slider.library.Transformers.FlipHorizontalTransformer;
-import com.daimajia.slider.library.Transformers.FlipPageViewTransformer;
-import com.daimajia.slider.library.Transformers.ForegroundToBackgroundTransformer;
-import com.daimajia.slider.library.Transformers.RotateDownTransformer;
-import com.daimajia.slider.library.Transformers.RotateUpTransformer;
-import com.daimajia.slider.library.Transformers.StackTransformer;
-import com.daimajia.slider.library.Transformers.TabletTransformer;
-import com.daimajia.slider.library.Transformers.ZoomInTransformer;
-import com.daimajia.slider.library.Transformers.ZoomOutSlideTransformer;
-import com.daimajia.slider.library.Transformers.ZoomOutTransformer;
 import com.daimajia.slider.library.Tricks.FixedSpeedScroller;
 import com.daimajia.slider.library.Tricks.InfinitePagerAdapter;
 import com.daimajia.slider.library.Tricks.InfiniteViewPager;
@@ -145,16 +127,6 @@ public class SliderLayout extends RelativeLayout{
     private PagerIndicator.IndicatorVisibility mIndicatorVisibility = PagerIndicator.IndicatorVisibility.Visible;
 
     /**
-     * {@link com.daimajia.slider.library.Tricks.ViewPagerEx} 's transformer
-     */
-    private BaseTransformer mViewPagerTransformer;
-
-    /**
-     * @see com.daimajia.slider.library.Animations.BaseAnimationInterface
-     */
-    private BaseAnimationInterface mCustomAnimation;
-
-    /**
      * {@link com.daimajia.slider.library.Indicators.PagerIndicator} shape, rect or oval.
      */
 
@@ -205,7 +177,6 @@ public class SliderLayout extends RelativeLayout{
 
         attributes.recycle();
         setPresetIndicator(PresetIndicators.Center_Bottom);
-        setPresetTransformer(mTransformerId);
         setSliderTransformDuration(mTransformerSpan,null);
         setIndicatorVisibility(mIndicatorVisibility);
         if(mAutoCycle){
@@ -360,19 +331,6 @@ public class SliderLayout extends RelativeLayout{
     }
 
     /**
-     * set ViewPager transformer.
-     * @param reverseDrawingOrder
-     * @param transformer
-     */
-    public void setPagerTransformer(boolean reverseDrawingOrder,BaseTransformer transformer){
-        mViewPagerTransformer = transformer;
-        mViewPagerTransformer.setCustomAnimationInterface(mCustomAnimation);
-        mViewPager.setPageTransformer(reverseDrawingOrder,mViewPagerTransformer);
-    }
-
-
-
-    /**
      * set the duration between two slider changes.
      * @param period
      * @param interpolator
@@ -422,110 +380,6 @@ public class SliderLayout extends RelativeLayout{
             return (other == null)? false:name.equals(other);
         }
     };
-
-    /**
-     * set a preset viewpager transformer by id.
-     * @param transformerId
-     */
-    public void setPresetTransformer(int transformerId){
-        for(Transformer t : Transformer.values()){
-            if(t.ordinal() == transformerId){
-                setPresetTransformer(t);
-                break;
-            }
-        }
-    }
-
-    /**
-     * set preset PagerTransformer via the name of transforemer.
-     * @param transformerName
-     */
-    public void setPresetTransformer(String transformerName){
-        for(Transformer t : Transformer.values()){
-            if(t.equals(transformerName)){
-                setPresetTransformer(t);
-                return;
-            }
-        }
-    }
-
-    /**
-     * Inject your custom animation into PageTransformer, you can know more details in
-     * {@link com.daimajia.slider.library.Animations.BaseAnimationInterface},
-     * and you can see a example in {@link com.daimajia.slider.library.Animations.DescriptionAnimation}
-     * @param animation
-     */
-    public void setCustomAnimation(BaseAnimationInterface animation){
-        mCustomAnimation = animation;
-        if(mViewPagerTransformer != null){
-            mViewPagerTransformer.setCustomAnimationInterface(mCustomAnimation);
-        }
-    }
-
-    /**
-     * pretty much right? enjoy it. :-D
-     *
-     * @param ts
-     */
-    public void setPresetTransformer(Transformer ts){
-        //
-        // special thanks to https://github.com/ToxicBakery/ViewPagerTransforms
-        //
-        BaseTransformer t = null;
-        switch (ts){
-            case Default:
-                t = new DefaultTransformer();
-                break;
-            case Accordion:
-                t = new AccordionTransformer();
-                break;
-            case Background2Foreground:
-                t = new BackgroundToForegroundTransformer();
-                break;
-            case CubeIn:
-                t = new CubeInTransformer();
-                break;
-            case DepthPage:
-                t = new DepthPageTransformer();
-                break;
-            case Fade:
-                t = new FadeTransformer();
-                break;
-            case FlipHorizontal:
-                t = new FlipHorizontalTransformer();
-                break;
-            case FlipPage:
-                t = new FlipPageViewTransformer();
-                break;
-            case Foreground2Background:
-                t = new ForegroundToBackgroundTransformer();
-                break;
-            case RotateDown:
-                t = new RotateDownTransformer();
-                break;
-            case RotateUp:
-                t = new RotateUpTransformer();
-                break;
-            case Stack:
-                t = new StackTransformer();
-                break;
-            case Tablet:
-                t = new TabletTransformer();
-                break;
-            case ZoomIn:
-                t = new ZoomInTransformer();
-                break;
-            case ZoomOutSlide:
-                t = new ZoomOutSlideTransformer();
-                break;
-            case ZoomOut:
-                t = new ZoomOutTransformer();
-                break;
-        }
-        setPagerTransformer(true,t);
-    }
-
-
 
     /**
      * Set the visibility of the indicators.
