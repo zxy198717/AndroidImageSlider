@@ -228,7 +228,7 @@ public abstract class BaseSliderView {
         if(getError() != 0){
             rq.error(getError());
         }
-
+        /*
         switch (mScaleType){
             case Fit:
                 rq.fitCenter();
@@ -240,6 +240,7 @@ public abstract class BaseSliderView {
                 rq.fitCenter().centerCrop();
                 break;
         }
+        */
         rq.listener(new RequestListener() {
             @Override
             public boolean onException(Exception e, Object model, Target target, boolean isFirstResource) {
